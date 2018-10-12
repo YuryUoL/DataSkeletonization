@@ -605,7 +605,7 @@
 1527608297 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/GeneralComputation/PointTools.h
 	"Definitions.h"
 
-1539348611 source:/home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/SingleEdgeOptimizer.cpp
+1539356418 source:/home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/SingleEdgeOptimizer.cpp
 	"SingleEdgeOptimizer.h"
 	<mlpack/methods/neighbor_search/neighbor_search.hpp>
 	<mlpack/methods/emst/dtb.hpp>
@@ -627,7 +627,7 @@
 	"TestPerformer.h"
 	<cstdlib>
 
-1539336670 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/SingleEdgeOptimizer.h
+1539355676 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/SingleEdgeOptimizer.h
 	<mlpack/core.hpp>
 
 1535107470 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/TestClasses/FunctionEvaluator.h
@@ -716,7 +716,7 @@
 1535439849 source:/home/yury/Dropbox/Github/DataSkeletonizationNew/include/Methods/NaiveMethods.cpp
 	"NaiveMethods.h"
 
-1539348792 source:/home/yury/Dropbox/Github/DataSkeletonizationNew/main.cpp
+1539356200 source:/home/yury/Dropbox/Github/DataSkeletonizationNew/main.cpp
 	<iostream>
 	<math.h>
 	<vector>
@@ -738,7 +738,7 @@
 	<cstdlib>
 	"GradientDescendTester.h"
 
-1539348752 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/GradientDescendTester.h
+1539356751 /home/yury/Dropbox/Github/DataSkeletonizationNew/include/GradientDescend/GradientDescendTester.h
 	"SingleEdgeOptimizer.h"
 	"CloudGenerator.h"
 	"SingleEdgeOptimizer.h"

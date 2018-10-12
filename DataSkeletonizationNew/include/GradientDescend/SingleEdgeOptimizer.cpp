@@ -25,8 +25,9 @@ SingleEdgeOptimizer::SingleEdgeOptimizer()
 }
 
 
-void SingleEdgeOptimizer::Gradient(arma::vec p, arma::vec u, arma::vec v, arma::mat & finale)
+void SingleEdgeOptimizer::Gradient(arma::vec p, arma::vec u, arma::vec v, arma::mat & finale, std::ofstream & mystream)
 {
+
     double tvalue = dot(p-v,p-u) / dot(u-v,u-v);
     double d[3];
     for (int i = 0; i < 3; i++)
@@ -46,6 +47,7 @@ void SingleEdgeOptimizer::Gradient(arma::vec p, arma::vec u, arma::vec v, arma::
             finale(0,i) = 0;
 
         }
+        mystream << "Case 1 detected" << std::endl;
     }
     else if (tvalue > 1)
     {
@@ -60,6 +62,7 @@ void SingleEdgeOptimizer::Gradient(arma::vec p, arma::vec u, arma::vec v, arma::
         {
             finale(0,i) = -2*p(i-3) + 2*u(i-3);
         }
+        mystream << "Case 2 detected" << std::endl;
     }
     else
     {
@@ -107,8 +110,9 @@ void SingleEdgeOptimizer::Gradient(arma::vec p, arma::vec u, arma::vec v, arma::
         }
         ww(0,6) = 2*(tvalue*u(0) - (tvalue - 1)*v(0) - p(0))*(u(0) - v(0));
         ww(0,6) = ww(0,6) + 2*(tvalue*u(1) - (tvalue - 1)*v(1) - p(1))*(u(1) - v(1));
-        ww(0,6) = ww(0,6 )+ 2*(tvalue*u(2) - (tvalue - 1)*v(2) - p(2))*(u(2) -v(2));
+        ww(0,6) = ww(0,6) + 2*(tvalue*u(2) - (tvalue - 1)*v(2) - p(2))*(u(2) -v(2));
         finale = ww*tm;
+        mystream << "Case 3 detected" << std::endl;
     }
 }
 
@@ -131,19 +135,21 @@ double EvaluateOnPointCloud( arma::vec & u, arma::vec & v, arma::mat & cloud )
     }
     return sum;
 }
-void SingleEdgeOptimizer::EvaluateDifferentialOnPointCloud( arma::vec & u, arma::vec & v, arma::mat & cloud, arma::vec & ur, arma::vec & vr )
+void SingleEdgeOptimizer::EvaluateDifferentialOnPointCloud( arma::vec & u, arma::vec & v, arma::mat & cloud, arma::vec & ur, arma::vec & vr,  std::ofstream & mystream)
 {
     arma::mat rur(1,6);
     rur.zeros();
 
     for (int i = 0; i < cloud.n_cols; i++)
     {
+        mystream << "Round " << i << " starting!" << std::endl;
         arma::mat utmp(1,6);
         utmp.zeros();
         arma::vec p = cloud.col(i);
-      //  std::cout << "Number: " << i << std::endl;
+        //  std::cout << "Number: " << i << std::endl;
         //std::cout << p << std::endl;
-        SingleEdgeOptimizer::Gradient(p, u, v, utmp);
+        SingleEdgeOptimizer::Gradient(p, u, v, utmp,mystream);
+        mystream << utmp << std::endl;
         rur = rur + utmp;
     }
     for (int i = 0; i < 2; i++)
@@ -165,9 +171,13 @@ double distanceBetweenConfigurations(arma::vec & u, arma::vec & v, arma::vec u2,
 
 }
 
-
 void SingleEdgeOptimizer::SimpleFunctionMinimizer(double gamma, int max_iter, double precision, arma::vec & u, arma::vec & v, arma::mat & cloud)
 {
+
+//! For debugging we need this file:
+
+    std::ofstream mystream;
+    mystream.open("/home/yury/Dropbox/Github/DataSkeletonizationNew/outputs/EdgeTest/First_Test/debug.txt");
 //! We implement this using constant linear search algorithm
 
 
@@ -175,22 +185,33 @@ void SingleEdgeOptimizer::SimpleFunctionMinimizer(double gamma, int max_iter, do
     double previousStepSize = 100.0;
     while((iter < max_iter) && (previousStepSize > precision))
     {
+        mystream << "Round " << iter << std::endl;
         arma::vec u1(3);
         arma::vec v1(3);
         arma::vec u2(3);
         arma::vec v2(3);
-        std::cout << "Allright (before): " << iter << std::endl;
-        EvaluateDifferentialOnPointCloud(u, v, cloud, u2, v2);
-        std::cout << "Allright (after):" << iter << std::endl;
-
+        EvaluateDifferentialOnPointCloud(u, v, cloud, u2, v2,mystream);
+        std::cout << "Vector U:" << std::endl;
+        std::cout << u << std::endl;
+        std::cout << "Vector V:" << std::endl;
+        std::cout << v << std::endl;
+        std::cout << "Vector U2: " << std::endl;
+        std::cout << u2 << std::endl;
+        std::cout << "Vector V2: " << std::endl;
+        std::cout << v2 << std::endl;
         u1 =  u - gamma*u2;
         v1 =  v - gamma*v2;
+        std::cout << "Vector U1: " << std::endl;
+        std::cout << u1 << std::endl;
+        std::cout << "Vector V1: " << std::endl;
+        std::cout << v1 << std::endl;
         double dconfig = distanceBetweenConfigurations(u,v,u1,v1);
         u = u1;
         v = v1;
         previousStepSize = dconfig;
         iter++;
     }
+    mystream.close();
 
 
 

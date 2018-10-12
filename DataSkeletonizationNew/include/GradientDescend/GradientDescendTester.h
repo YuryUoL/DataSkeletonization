@@ -20,17 +20,18 @@ public:
         //! We set our first guess to be the diagonal
         arma::vec u{5,5,5};
         arma::vec v{95,-5,-5};
-        double gamma = pow(10,-8);
-        int maxitr = 2;
+        double gamma = pow(10,-4);
+        int maxitr = 1000;
         double minError = 1.0;
 
         std::cout << "Still allright" << std::endl;
 
 
         SingleEdgeOptimizer::SimpleFunctionMinimizer(gamma, maxitr, minError,u,v,data);
-        std::cout << "Vector 1: " << u << std::endl;
-        std::cout << "Vector 2: " << v << std::endl;
-        std::string cloudpath = folder + "cloud.vtk";
+        std::cout << "Resuluts: " << std::endl;
+        std::cout << "Vector 1: " << std::endl << u << std::endl;
+        std::cout << "Vector 2: " << std::endl << v << std::endl;
+        std::string cloudpath= folder + "cloud.vtk";
         std::string edgepath = folder + "edge.vtk";
         MyGraphType EdgeGraph;
         vertex_descriptor uedge = Graph::add_vertex(EdgeGraph, Point(u(0), u(1), u(2)));
@@ -43,7 +44,7 @@ public:
         mlpack::emst::DualTreeBoruvka<> MSTOP(data);
         arma::mat results;
         MSTOP.ComputeMST(results);
-        GeneralConvertor::MSTToVTK(data,results, edgepath);
+        GeneralConvertor::MSTToVTK(data,results, cloudpath);
 
     }
 

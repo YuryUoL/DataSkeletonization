@@ -243,7 +243,9 @@ int main()
 
 //! This is required, to get proper random number sequence
  srand( time( NULL ) );
-
+ //! We use this number sequence to debug the code:
+ //srand(20);
+std::cout <<rand() << std::endl;
 //! Here we test:
 runGradientDescendTester();
 //RunSeriousTests();
